@@ -5,6 +5,13 @@ import java.util.ArrayList;
 public class InventoryApp {
     public static void main(String[] args) {
 
+        ArrayList<Product> inventory = getInventory();
+
+        System.out.println("We carry the following inventory: ");
+
+        for (Product product : inventory) {
+            System.out.printf("id: %d %s - $%.2f \n", product.getId(), product.getName(), product.getPrice());
+        }
 
     }
 
