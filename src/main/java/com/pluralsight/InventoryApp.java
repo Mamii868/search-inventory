@@ -4,21 +4,18 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Scanner;
 
 public class InventoryApp {
+    static Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
 
         ArrayList<Product> inventory = getInventory();
 
 //        Sort inventory by name
         inventory.sort(Comparator.comparing(Product::getName));
-
-        System.out.println("We carry the following inventory: ");
-
-
-        for (Product product : inventory) {
-            System.out.printf("id: %d, %s - $%.2f \n", product.getId(), product.getName(), product.getPrice());
-        }
+        mainMenu();
 
     }
 
@@ -42,5 +39,20 @@ public class InventoryApp {
 //        id|name|price
         String[] splitFileData = data.split("\\|");
         return new Product(Integer.parseInt(splitFileData[0]), splitFileData[1], Double.parseDouble(splitFileData[2]));
+    }
+
+    public static void mainMenu() {
+        System.out.println("=== Marc's Hardware(?) Store ===");
+        System.out.println("""
+                What do you want to do?
+                1- List all products
+                2- Lookup a product by its id
+                3- Find all products within a price range
+                4- Add a new product
+                5- Quit the application""");
+        System.out.print("Enter command");
+        String userInput = scanner.nextLine();
+
+
     }
 }
