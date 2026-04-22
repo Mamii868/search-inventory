@@ -1,5 +1,7 @@
 package com.pluralsight;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 
 public class InventoryApp {
@@ -10,20 +12,30 @@ public class InventoryApp {
         System.out.println("We carry the following inventory: ");
 
         for (Product product : inventory) {
-            System.out.printf("id: %d %s - $%.2f \n", product.getId(), product.getName(), product.getPrice());
+            System.out.printf("id: %d, %s - $%.2f \n", product.getId(), product.getName(), product.getPrice());
         }
 
     }
 
     public static ArrayList<Product> getInventory() {
         ArrayList<Product> productList = new ArrayList<Product>();
+        try {
+            FileReader fileReader = new FileReader("src/main/resources/inventory.csv");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String currentLine;
 
-        productList.add(new Product(1, "AMD Ryzen 5600x", 156.99));
-        productList.add(new Product(2, "Razer Chroma Cynosa", 49.99));
-        productList.add(new Product(3, "Steel Series X", 79.99));
-        productList.add(new Product(4, "Asus TUFF 240hz Monitor", 294.99));
-        productList.add(new Product(5, "CoolerMaster CPU cooler", 34.99));
-
+            while ((currentLine = bufferedReader.readLine()) != null) {
+                productList.add(processFileData(currentLine));
+            }
+        } catch (Exception e) {
+            System.out.println("An error occurred");
+        }
         return productList;
+    }
+
+    public static Product processFileData(String data) {
+//        id|name|price
+        String[] splitFileData = data.split("\\|");
+        return new Product(Integer.parseInt(splitFileData[0]), splitFileData[1], Double.parseDouble(splitFileData[2]));
     }
 }
