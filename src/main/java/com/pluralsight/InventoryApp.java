@@ -59,21 +59,56 @@ public class InventoryApp {
                     5- Quit the application""");
             System.out.print("Enter command: ");
             int userInput = scanner.nextInt();
+            scanner.nextLine();
 
             System.out.println();
             switch (userInput) {
                 case 1 -> productList(inventory);
+                case 2 -> lookupById(inventory);
 
             }
+            Thread.sleep(500);
             System.out.println();
-
         }
     }
 
-    public static void productList(ArrayList<Product> inventory) throws InterruptedException {
+    public static void productList(ArrayList<Product> inventory) {
         for (Product product : inventory) {
             System.out.printf("id: %d, %s - $%.2f%n", product.getId(), product.getName(), product.getPrice());
         }
-        Thread.sleep(1000);
+
+    }
+
+    public static void lookupById(ArrayList<Product> inventory) {
+        try {
+            while (true) {
+                System.out.print("Enter a product id (X to exit): ");
+                String userInput = scanner.nextLine();
+
+                if (userInput.equalsIgnoreCase("x")) {
+                    System.out.println("Exiting...");
+                    break;
+                }
+
+                boolean foundProduct = false;
+                for (Product product : inventory) {
+                    if (product.getId() == Integer.parseInt(userInput)) {
+                        foundProduct = true;
+                        System.out.printf("id: %d, %s - $%.2f%n", product.getId(), product.getName(), product.getPrice());
+                    }
+                }
+
+                if (!foundProduct) {
+                    System.out.println("Product not found");
+                }
+            }
+
+
+        } catch (Exception e) {
+            System.out.println("Error looking up by id");
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
     }
 }
