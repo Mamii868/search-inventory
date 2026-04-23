@@ -65,6 +65,7 @@ public class InventoryApp {
             switch (userInput) {
                 case 1 -> productList(inventory);
                 case 2 -> lookupById(inventory);
+                case 3 -> priceRangeLookup(inventory);
 
             }
             Thread.sleep(500);
@@ -106,9 +107,34 @@ public class InventoryApp {
 
         } catch (Exception e) {
             System.out.println("Error looking up by id");
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
 
+    }
+
+    public static void priceRangeLookup(ArrayList<Product> inventory) {
+        try {
+            System.out.print("Enter minimum price range (numbers & decimals only): ");
+            double minRange = scanner.nextDouble();
+
+            System.out.print("Enter maximum price range (numbers & decimals only): ");
+            double maxRange = scanner.nextDouble();
+
+            boolean productFound = false;
+
+            for (Product product : inventory) {
+                if (minRange < product.getPrice() && product.getPrice() < maxRange) {
+                    productFound = true;
+                    System.out.printf("id: %d, %s - $%.2f%n", product.getId(), product.getName(), product.getPrice());
+                }
+            }
+            if (!productFound) {
+                System.out.println("Products not found");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error looking up by price range");
+            throw new RuntimeException(e);
+        }
     }
 }
