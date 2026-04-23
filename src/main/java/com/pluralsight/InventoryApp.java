@@ -1,7 +1,9 @@
 package com.pluralsight;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Scanner;
@@ -66,6 +68,8 @@ public class InventoryApp {
                 case 1 -> productList(inventory);
                 case 2 -> lookupById(inventory);
                 case 3 -> priceRangeLookup(inventory);
+                case 4 -> addProduct(inventory);
+                case 5 -> appRunning = false;
 
             }
             Thread.sleep(500);
@@ -134,6 +138,42 @@ public class InventoryApp {
 
         } catch (Exception e) {
             System.out.println("Error looking up by price range");
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void addProduct(ArrayList<Product> inventory) {
+        try {
+
+
+            while (true) {
+                FileWriter fileWriter = new FileWriter("src/main/resources/inventory.csv", true);
+                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+                System.out.print("Enter the new product name (X to Exit): ");
+                String nameInput = scanner.nextLine().trim();
+                if (nameInput.equalsIgnoreCase("x")) {
+                    System.out.println("Exiting...");
+                    break;
+                }
+
+                System.out.print("Enter the new price (numbers and decimals only): ");
+                double priceInput = scanner.nextDouble();
+                scanner.nextLine();
+
+                inventory.sort(Comparator.comparing(Product::getId));
+                int newId = inventory.get(inventory.size() - 1).getId() + 1;
+
+                System.out.println("Adding item...");
+                inventory.add(new Product(newId, nameInput, priceInput));
+                bufferedWriter.write("\n" + newId + "|" + nameInput + "|" + String.format("%.2f", priceInput));
+                System.out.printf("id: %d, %s - $%.2f%n", newId, nameInput, priceInput);
+                System.out.println("Added item!");
+                bufferedWriter.close();
+            }
+
+
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
