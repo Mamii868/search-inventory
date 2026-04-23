@@ -11,12 +11,17 @@ public class InventoryApp {
     static boolean appRunning = true;
 
     public static void main(String[] args) {
-
-        ArrayList<Product> inventory = getInventory();
+        try {
+            ArrayList<Product> inventory = getInventory();
 
 //        Sort inventory by name
-        inventory.sort(Comparator.comparing(Product::getName));
-        mainMenu(inventory);
+            inventory.sort(Comparator.comparing(Product::getName));
+            mainMenu(inventory);
+        } catch (Exception e) {
+            System.out.println("An Error Occurred. Exiting...");
+            System.exit(0);
+        }
+
 
     }
 
@@ -42,7 +47,7 @@ public class InventoryApp {
         return new Product(Integer.parseInt(splitFileData[0]), splitFileData[1], Double.parseDouble(splitFileData[2]));
     }
 
-    public static void mainMenu(ArrayList<Product> inventory) {
+    public static void mainMenu(ArrayList<Product> inventory) throws InterruptedException {
         while (appRunning) {
             System.out.println("=== Marc's Hardware(?) Store ===");
             System.out.println("""
@@ -58,16 +63,17 @@ public class InventoryApp {
             System.out.println();
             switch (userInput) {
                 case 1 -> productList(inventory);
+
             }
             System.out.println();
 
         }
     }
 
-    public static void productList(ArrayList<Product> inventory) {
+    public static void productList(ArrayList<Product> inventory) throws InterruptedException {
         for (Product product : inventory) {
             System.out.printf("id: %d, %s - $%.2f%n", product.getId(), product.getName(), product.getPrice());
         }
-
+        Thread.sleep(1000);
     }
 }
